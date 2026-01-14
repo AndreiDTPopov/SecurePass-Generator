@@ -1,0 +1,57 @@
+import string
+import random
+
+def generate_password(length=12, use_uppercase=True, use_digits=True, use_special_chars=True):
+    """
+    Функция для генерации надежного пароля заданной длины.
+    
+    :param length: Длина пароля (по умолчанию 12 символов)
+    :param use_uppercase: Включать заглавные буквы (True по умолчанию)
+    :param use_digits: Включать цифры (True по умолчанию)
+    :param use_special_chars: Включать спецсимволы (True по умолчанию)
+    :return: Сгенерированный пароль
+    """
+    # Набор возможных символов
+    lowercase_letters = string.ascii_lowercase
+    uppercase_letters = string.ascii_uppercase if use_uppercase else ''
+    digits = string.digits if use_digits else ''
+    special_characters = '!@#$%^&*()_+=-[]{}|;:,.<>?' if use_special_chars else ''
+    
+    # Объединяем наборы символов
+    all_characters = lowercase_letters + uppercase_letters + digits + special_characters
+    
+    # Проверка, чтобы избежать пустой строки символов
+    if not all_characters:
+        raise ValueError("Необходимо выбрать хотя бы одну группу символов.")
+    
+    # Генерируем пароль
+    return ''.join(random.choice(all_characters) for _ in range(length))
+
+if __name__ == "__main__":
+    print("=== Генератор надежных паролей ===")
+    try:
+        while True:
+            # Получаем длину пароля от пользователя
+            length = int(input("Введите желаемую длину пароля (рекомендуемая длина > 8): "))
+            
+            # Опрашиваем пользователя относительно включаемых групп символов
+            use_uppercase = input("Использовать заглавные буквы? (Y/N): ").strip().lower() != 'n'
+            use_digits = input("Использовать цифры? (Y/N): ").strip().lower() != 'n'
+            use_special_chars = input("Использовать специальные символы? (Y/N): ").strip().lower() != 'n'
+        
+            # Генерация пароля
+            password = generate_password(length=length,
+                                         use_uppercase=use_uppercase,
+                                         use_digits=use_digits,
+                                         use_special_chars=use_special_chars)
+        
+            # Отображение результата
+            print(f"Ваш надежный пароль: {password}")
+        
+            # Повтор процедуры
+            repeat = input("\nХотите сгенерировать ещё один пароль? (Y/N): ")
+            if repeat.strip().lower() == 'n':
+                break
+                
+    except KeyboardInterrupt:
+        print("\nПрервано пользователем.")
